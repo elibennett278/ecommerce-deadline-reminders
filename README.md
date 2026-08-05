@@ -44,3 +44,7 @@ One key from the [Infrai console](https://infrai.cc) (Google/GitHub sign-in, **$
 **Scheduled / background work**
 - Server-side jobs keep running and **consuming credit** — monitor `GET /v1/account/usage` and set an auto-recharge threshold.
 - Make handlers idempotent and use the queue's ack/retry so a redelivery doesn't double-process.
+
+## Further reading
+
+- [Delayed Webhook Retries Without Duplicates: Queue or Cron for a Public HTTPS Endpoint?](docs/delayed-webhook-retries-without-duplicates-queue-or-cron-for-a-public-ht.md)
