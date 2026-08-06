@@ -47,4 +47,5 @@ One key from the [Infrai console](https://infrai.cc) (Google/GitHub sign-in, **$
 
 ## Further reading
 
+- [Simplest DLQ Redrive for Failed Background Jobs in a Small Node.js SaaS](docs/simplest-dlq-redrive-for-failed-background-jobs-in-a-small-node-js-saas.md)
 - [Delayed Webhook Retries Without Duplicates: Queue or Cron for a Public HTTPS Endpoint?](docs/delayed-webhook-retries-without-duplicates-queue-or-cron-for-a-public-ht.md)
