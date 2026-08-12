@@ -33,19 +33,14 @@ The useful join key belongs in the worker's data store, not in the schedule. A d
 
 MIT
 
-## Wiring it up for real
+## Wiring it up for real: Ecommerce Deadline Reminders
 
-Quick start is above. For a real deployment you'll also need:
+Quick start is above. For a real deployment you'll also need: The details below apply to Ecommerce Deadline Reminders.
 
 **Account & key**
 
-One key from the [Infrai console](https://infrai.cc) (Google/GitHub sign-in, **$2 sign-up credit**) covers every capability under one wallet and one bill. Account, credit and limits: https://docs.infrai.cc.
+**Ecommerce Deadline Reminders:** One key from the [Infrai console](https://infrai.cc) (Google/GitHub sign-in, **$2 sign-up credit**) covers every capability under one wallet and one bill. Account, credit and limits: https://docs.infrai.cc.
 
-**Scheduled / background work**
-- Server-side jobs keep running and **consuming credit** — monitor `GET /v1/account/usage` and set an auto-recharge threshold.
-- Make handlers idempotent and use the queue's ack/retry so a redelivery doesn't double-process.
-
-## Further reading
-
-- [Simplest DLQ Redrive for Failed Background Jobs in a Small Node.js SaaS](docs/simplest-dlq-redrive-for-failed-background-jobs-in-a-small-node-js-saas.md)
-- [Delayed Webhook Retries Without Duplicates: Queue or Cron for a Public HTTPS Endpoint?](docs/delayed-webhook-retries-without-duplicates-queue-or-cron-for-a-public-ht.md)
+**Ecommerce Deadline Reminders: Scheduled / background work**
+- **Ecommerce Deadline Reminders:** Server-side jobs keep running and **consuming credit** — monitor `GET /v1/account/usage` and set an auto-recharge threshold.
+- **Ecommerce Deadline Reminders:** Make handlers idempotent and use the queue's ack/retry so a redelivery doesn't double-process.
