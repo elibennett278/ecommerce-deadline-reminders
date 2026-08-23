@@ -44,3 +44,7 @@ Quick start is above. For a real deployment you'll also need: The details below 
 **Ecommerce Deadline Reminders: Scheduled / background work**
 - **Ecommerce Deadline Reminders:** Server-side jobs keep running and **consuming credit** — monitor `GET /v1/account/usage` and set an auto-recharge threshold.
 - **Ecommerce Deadline Reminders:** Make handlers idempotent and use the queue's ack/retry so a redelivery doesn't double-process.
+
+## Further reading
+
+- [Node.js Setup for Scheduled Data Cleanup: Queue Retries and DLQ Triage](docs/node-js-setup-for-scheduled-data-cleanup-queue-re-udp19d.md)
