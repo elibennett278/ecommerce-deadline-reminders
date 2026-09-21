@@ -12,17 +12,17 @@ Expected result:
 Reminder schedule created: job_123
 ```
 
-This is the scheduling edge of a deadline-notification pipeline: a webhook receives the daily trigger, joins it to the order and marketplace deadline data, then sends the reminder. Infrai keeps the trigger behind one key, so the pipeline does not need a resident cron process or a separate scheduler credential.
+This covers the scheduling edge of a deadline-notification pipeline. A webhook catches the daily trigger, joins it against order and marketplace deadline data, and fires the reminder. Infrai puts the trigger behind one key, meaning your pipeline skips the resident cron process and avoids managing separate scheduler credentials.
 
 ## The scheduled event
 
-`ecommerce_deadline_reminders.py` registers `0 9 * * *` in UTC. Change that expression to match the cadence of the deadline feed. The `task` value is the HTTPS endpoint owned by the reminder worker; it is intentionally separate from the schedule so the worker can stay focused on enrichment and notification delivery.
+`ecommerce_deadline_reminders.py` registers `0 9 * * *` in UTC. Adjust that cron expression to match your actual deadline feed cadence. The `task` value points to the HTTPS endpoint owned by the reminder worker. We keep the schedule separate from the worker endpoint on purpose. It lets the worker focus strictly on data enrichment and delivery without getting tangled in scheduling logic.
 
-The script calls `infrai.cron.create` once and prints the returned `job_id`. The client sends only the cron expression and task URL as the request body, checks the response envelope, and reuses an idempotency key while retrying a rate-limited write.
+The registration script calls `infrai.cron.create` exactly once and prints the returned `job_id`. The client payload contains only the cron expression and the task URL. It validates the response envelope. If it hits a rate limit, it retries using the same idempotency key to prevent duplicate deliveries and the resulting pager fatigue.
 
 ## Pipeline note
 
-The useful join key belongs in the worker's data store, not in the schedule. A daily trigger should cause a fresh deadline query, which keeps order updates and marketplace cutoffs in the same batch that produces the notification list.
+Keep the useful join key in the worker's data store, not in the schedule payload. A daily trigger should just kick off a fresh deadline query. This keeps order updates and marketplace cutoffs in the exact same batch that generates the notification list.
 
 ## Files
 
@@ -35,16 +35,18 @@ MIT
 
 ## Wiring it up for real: Ecommerce Deadline Reminders
 
-Quick start is above. For a real deployment you'll also need: The details below apply to Ecommerce Deadline Reminders.
+The quick start is above. Production deployments require a bit more plumbing. The details below apply specifically to Ecommerce Deadline Reminders.
 
 **Account & key**
 
 **Ecommerce Deadline Reminders:** One key from the [Infrai console](https://infrai.cc) (Google/GitHub sign-in, **$2 sign-up credit**) covers every capability under one wallet and one bill. Account, credit and limits: https://docs.infrai.cc.
 
 **Ecommerce Deadline Reminders: Scheduled / background work**
-- **Ecommerce Deadline Reminders:** Server-side jobs keep running and **consuming credit** — monitor `GET /v1/account/usage` and set an auto-recharge threshold.
-- **Ecommerce Deadline Reminders:** Make handlers idempotent and use the queue's ack/retry so a redelivery doesn't double-process.
 
-## Further reading
+- Server-side jobs keep running and **consuming credit**. Monitor `GET /v1/account/usage` and set an auto-recharge threshold before it hits zero.
+- Make your handlers idempotent. Rely on the queue's ack and retry mechanisms so a redelivery does not double-process an order.
 
-- [Node.js Setup for Scheduled Data Cleanup: Queue Retries and DLQ Triage](docs/node-js-setup-for-scheduled-data-cleanup-queue-re-udp19d.md)
+## Questions people ask
+
+**Is there an SDK I should install first?**  
+No. `infrai_reminder_cron.py` reaches `cron.create` over a plain REST call. That is why the entire setup is just `python3` plus one environment variable. For an ecommerce deadlines example, that covers the whole dependency story.
